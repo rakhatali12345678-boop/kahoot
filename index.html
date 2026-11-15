@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kahoot 500 Soz</title>
+<style>
+body{font-family:sans-serif;background:#6a1b9a;color:white;text-align:center;margin:0;padding:10px}
+h1{font-size:22px}
+.levels{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.levels button{padding:10px 14px;border:none;border-radius:20px;background:white;color:#6a1b9a;font-weight:bold}
+.card{background:white;color:#222;border-radius:20px;padding:20px;margin:15px auto;max-width:400px}
+.word{font-size:42px;font-weight:bold}
+.pron{color:#666;font-size:18px}
+.trans{font-size:24px;color:#6a1b9a;font-weight:bold;margin:10px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
+.opts button{padding:15px;border:none;border-radius:12px;font-size:17px;background:#eee}
+.opts button.correct{background:#4caf50;color:white}
+.opts button.wrong{background:#f44336;color:white}
+</style>
+</head>
+<body>
+<h1>🎮 KAHOOT - 500 SOZ</h1>
+<div id="score">Ұпай: 0 | Деңгей: 1</div>
+<div class="levels" id="levels"></div>
+<div class="card">
+<div class="word" id="word">Hello</div>
+<div class="pron" id="pron">[həˈloʊ]</div>
+<div class="trans" id="trans">??? - Қазақшасы қандай?</div>
+<div class="opts" id="opts"></div>
+<button onclick="nextWord()" style="margin-top:15px;padding:12px 25px;border:none;border-radius:20px;background:#6a1b9a;color:white;font-size:17px">Келесі сөз ➡️</button>
+</div>
+<script>
+const words=[
+["Hello","Сәлем","[həˈloʊ]"],["Thank you","Рахмет","[θæŋk juː]"],["Yes","Иә","[jes]"],["No","Жоқ","[noʊ]"],["Good","Жақсы","[ɡʊd]"],["Bad","Жаман","[bæd]"],["Big","Үлкен","[bɪɡ]"],["Small","Кішкентай","[smɔːl]"],["Hot","Ыстық","[hɑːt]"],["Cold","Суық","[koʊld]"],
+["Water","Су","[ˈwɔːtər]"],["Bread","Нан","[bred]"],["Milk","Сүт","[mɪlk]"],["Apple","Алма","[ˈæpl]"],["Dog","Ит","[dɔːɡ]"],["Cat","Мысық","[kæt]"],["House","Үй","[haʊs]"],["School","Мектеп","[skuːl]"],["Book","Кітап","[bʊk]"],["Friend","Дос","[frend]"],
+["Mother","Ана","[ˈmʌðər]"],["Father","Әке","[ˈfɑːðər]"],["Sun","Күн","[sʌn]"],["Moon","Ай","[muːn]"],["Star","Жұлдыз","[stɑːr]"],["Day","Күн","[deɪ]"],["Night","Түн","[naɪt]"],["Happy","Бақытты","[ˈhæpi]"],["Sad","Мұңды","[sæd]"],["Love","Махаббат","[lʌv]"],
+["Run","Жүгіру","[rʌn]"],["Walk","Жүру","[wɔːk]"],["Eat","Жеу","[iːt]"],["Drink","Ішу","[drɪŋk]"],["Sleep","Ұйықтау","[sliːp]"],["Play","Ойнау","[pleɪ]"],["Read","Оқу","[riːd]"],["Write","Жазу","[raɪt]"],["Speak","Сөйлеу","[spiːk]"],["Listen","Тыңдау","[ˈlɪsn]"],
+["Red","Қызыл","[red]"],["Blue","Көк","[bluː]"],["Green","Жасыл","[ɡriːn]"],["White","Ақ","[waɪt]"],["Black","Қара","[blæk]"],["One","Бір","[wʌn]"],["Two","Екі","[tuː]"],["Three","Үш","[θriː]"],["Four","Төрт","[fɔːr]"],["Five","Бес","[faɪv]"]
+];
+let level=1, idx=0, score=0;
+const levelsDiv=document.getElementById('levels');
+for(let i=1;i<=10;i++){let b=document.createElement('button');b.textContent=i;b.onclick=()=>{level=i;idx=(i-1)*5;showWord();document.querySelectorAll('.levels button').forEach(x=>x.classList.remove('active'));b.classList.add('active')};levelsDiv.appendChild(b)}
+function showWord(){
+let start=(level-1)*5;
+let w=words[(start+idx)%words.length] || words[0];
+document.getElementById('word').textContent=w[0];
+document.getElementById('pron').textContent=w[2];
+document.getElementById('trans').textContent='??? - Қазақшасы қандай?';
+let opts=[w[1]];
+while(opts.length<4){let r=words[Math.floor(Math.random()*words.length)][1];if(!opts.includes(r))opts.push(r)}
+opts.sort(()=>Math.random()-0.5);
+let o=document.getElementById('opts');o.innerHTML='';
+opts.forEach(t=>{let btn=document.createElement('button');btn.textContent=t;btn.onclick=()=>{if(t===w[1]){btn.classList.add('correct');score+=10;document.getElementById('score').textContent='Ұпай: '+score+' | Деңгей: '+level;document.getElementById('trans').textContent='Дұрыс! ✅ '+w[1]}else{btn.classList.add('wrong');document.getElementById('trans').textContent='Қате! Дұрысы: '+w[1]}};o.appendChild(btn)})
+}
+function nextWord(){idx++;showWord()}
+showWord();
+</script>
+</body>
+</html>
